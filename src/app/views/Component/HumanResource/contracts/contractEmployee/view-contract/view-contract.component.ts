@@ -9,7 +9,8 @@ import { AppLoaderService } from 'app/shared/services/app-loader/app-loader.serv
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import html2pdf from 'html2pdf';
+import html2pdf from 'html2pdf.js';
+
 
 @Component({
   selector: 'app-view-contract',
@@ -95,7 +96,7 @@ export class ViewContractComponent implements OnInit {
         .from(element)
         .save('MonContrat.pdf');
     }
-
+    
   
     /********************************************  imprimer contrat     ******************************************/
     print() {
