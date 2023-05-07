@@ -70,47 +70,52 @@
 <div id="FormExceptionalFee">
   <div class="item-table">
     <mat-table [dataSource]="dataSourceE" class="mat-elevation-z4" #table>
-      <!-- Number Column -->
-      <ng-container matColumnDef="">
-        <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
-        <mat-cell *matCellDef="let element; let i = index">
-          {{ i + 1 }}
-        </mat-cell>
-      </ng-container>
+      
 
       <!-- Item Name Column -->
-      <ng-container matColumnDef="">
+      <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>
-          {{ itemTableColumn[1] }}
+         name
         </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{ element.name }} </mat-cell>
       </ng-container>
 
       <!-- Unit price Column -->
-      <ng-container matColumnDef="">
+      <ng-container matColumnDef="type">
         <mat-header-cell *matHeaderCellDef>
-          {{ itemTableColumn[2] }}
+         type
         </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.price }} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{ element.feeType}} </mat-cell>
       </ng-container>
 
       <!-- Unit Column -->
-      <ng-container matColumnDef="">
+      <ng-container matColumnDef="description">
         <mat-header-cell *matHeaderCellDef>
-          {{ itemTableColumn[3] }}
+        description
         </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.unit }} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{ element.shortDescription }} </mat-cell>
       </ng-container>
 
       <!-- Cost column -->
-      <ng-container matColumnDef="">
+      <ng-container matColumnDef="amount">
         <mat-header-cell *matHeaderCellDef>
-          {{ itemTableColumn[4] }}
+          amount
         </mat-header-cell>
         <mat-cell *matCellDef="let element">
-          {{ element.unit * element.price }}
+          {{ element.amount }}
         </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="currency">
+        <mat-header-cell *matHeaderCellDef>
+          currency
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.currency }}
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumnsE"></mat-header-row>
+      <mat-row *matRowDef="let element; columns: displayedColumnsE;"></mat-row>
+   
     </mat-table>
   </div>
 </div>
@@ -123,6 +128,37 @@
   <div class="text-center pt-8 pb-16"  style="color: #0081FF;">
     <U><h2>Liste des bénéfices</h2></U> 
   </div>
- 
+  <div id="FormExceptionalFee">
+    <div class="item-table">
+      <mat-table [dataSource]="dataSourceB" class="mat-elevation-z4" #table>
+        
+  
+        <!-- Item Name Column -->
+        
+  
+        <!-- Unit price Column -->
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef>
+           type
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{ element.contractBenifitType}} </mat-cell>
+        </ng-container>
+  
+        <!-- Unit Column -->
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef>
+          description
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{ element.description }} </mat-cell>
+        </ng-container>
+  
+     
+       
+        <mat-header-row *matHeaderRowDef="displayedColumnsB"></mat-header-row>
+        <mat-row *matRowDef="let element; columns: displayedColumnsB;"></mat-row>
+     
+      </mat-table>
+    </div>
+  </div>
 </mat-card>
   <!-- End Benefit -->

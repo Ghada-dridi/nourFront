@@ -45,10 +45,10 @@ export class ViewContractComponent implements OnInit {
        }
 
       getDisplayedColumnsB() {
-        return ['num','title', 'type' ,'description'];
+        return [ 'type' ,'description'];
       }
       getDisplayedColumnsE() {
-        return ['num','type ', 'name' ,'description','amount','currency'];
+        return ['type', 'name' ,'description','amount','currency'];
       }
   
     ngOnInit(): void {
