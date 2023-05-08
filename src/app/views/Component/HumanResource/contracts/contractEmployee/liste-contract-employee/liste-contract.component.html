@@ -101,14 +101,14 @@
          <ng-container matColumnDef="actions">
            <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
            <mat-cell *matCellDef="let row">
-             <button mat-icon-button mat-sm-button color="primary" class="mr-16" (click)="openPopUp(row)">
+             <!--<ng-content select="selector"></ng-content><button mat-icon-button mat-sm-button color="primary" class="mr-16" (click)="openPopUp(row)">
                <mat-icon>edit</mat-icon>
-             </button>
+             </button>-->
              <button
              mat-icon-button
              routerLink="/contractEmployee/{{ row.id }}"
              routerLinkActive="router-link-active"
-             color="primary"
+             color="accent" 
            >
              <mat-icon>visibility</mat-icon>
            </button>

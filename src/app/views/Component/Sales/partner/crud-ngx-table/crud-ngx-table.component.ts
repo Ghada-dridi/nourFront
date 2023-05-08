@@ -40,7 +40,8 @@ export class CrudNgxTableComponent implements OnInit, OnDestroy {
     private crudService: CrudPartnerService,
     private confirmService: AppConfirmService,
     private loader: AppLoaderService
-  ) {     this.dataSource = new MatTableDataSource<Partner>([]);}
+  ) {     this.dataSource = new MatTableDataSource<Partner>([]);
+  }
 
   ngOnInit() {
     this.displayedColumns = this.getDisplayedColumns();

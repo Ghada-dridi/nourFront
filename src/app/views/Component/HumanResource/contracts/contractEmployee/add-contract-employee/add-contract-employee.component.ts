@@ -2,11 +2,15 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { HttpClient } from '@angular/common/http';
 import { ArticleService } from './../article.service';
 import { ContractEmployeeService } from './../contract-employee.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FileUploader } from 'ng2-file-upload';
 import { article } from 'app/shared/models/article';
 import { ContractBenifitType, Currency, FeeType } from 'app/shared/models/avantagesContrat';
+import { AppConfirmService } from 'app/shared/services/app-confirm/app-confirm.service';
+import { Router } from '@angular/router';
+import { MatStepper } from '@angular/material/stepper';
+
 
 @Component({
   selector: 'app-add-contract-employee',
@@ -15,6 +19,9 @@ import { ContractBenifitType, Currency, FeeType } from 'app/shared/models/avanta
 })
 export class AddContractEmployeeComponent implements OnInit {
 
+  @ViewChild(MatStepper) stepper: MatStepper;
+
+  errorMessage: string;
   myForm : FormGroup;
   repeatForm: FormGroup;
   tabGroup: MatTabGroup; 
@@ -64,8 +71,12 @@ export class AddContractEmployeeComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private contractEmployeeService: ContractEmployeeService,
     private articleService: ArticleService,
+    private confirmService : AppConfirmService,
+    private router : Router,
     private http : HttpClient,
-    ) { }
+    ) { 
+      
+    }
 
 
 
@@ -252,26 +263,41 @@ get getMyValueBenefit() {
 
 
 /************************************************** Ajouter contrat  ****************************************************/
-  addContract(): void {
-    console.log('Submitting form...');
+    
+    addContract() : void {
+      this.confirmService.confirm({ message: 'Le contrat est ajouté avec succès ! Voulez-vous ajouter des avantages à ce contrat?' })
+  .subscribe((result: boolean) => {
+    if (result) {
+      console.log('Submitting form...');
       console.log('Form is valid, submitting...');
       let selectedArticles = this.myFormContract.get('articles').value;
       console.log(selectedArticles);
       console.log(this.myFormContract.value);
       this.contractEmployeeService.addItem(this.myFormContract.value).subscribe({
-     // this.contractEmployeeService.addItem({...this.myFormContract.value , resourceId:this.selectedEmployee.id}).subscribe({
         next: (res) => {
           console.log('Item added successfully', res);
           this.selectedContract = res;
           console.log('Selected contract ID:', this.selectedContract.id);
           console.log('Form value', this.myFormContract.value);
           this.submitted = true;
+          // Redirection vers le step suivant
+          this.stepper.next();
         },
-        error: (e) => console.error('Error adding item', e)
+        error: (e) => {
+          console.error('Error adding item', e);
+          // Afficher le message d'erreur
+          this.errorMessage = 'Erreur lors de l\'ajout du contrat. Veuillez vérifier les champs.';
+          // Redirection vers la liste des contrats
+          this.router.navigate(['/contractEmployee/liste-employee-contracts']);
+        }
       });
-    
+    } else {
+      // Redirection vers la liste des contrats
+      this.router.navigate(['/contractEmployee/liste-employee-contracts']);
     }
-  
+  });
+
+    }
   /********************************************************** la fonction qui retourne le titre de l'article  ******************************************************/
   
   getArticleTitle(){

@@ -1,3 +1,4 @@
+import { articleUpdated } from './../../../../../shared/models/article';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { article } from 'app/shared/models/article';
@@ -9,6 +10,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 })
 export class ArticleService {
   private apiUrl = 'http://localhost:8084/rh/article';
+  private apiUrlUpdated ='http://localhost:8084/rh/articleUpdated';
 
   constructor(private http : HttpClient) { }
 
@@ -30,9 +32,14 @@ export class ArticleService {
     );
   }
 
-
-   
- 
+/*******************************************  update articel Updated   **********************************************/
+updateArticleItem(id: number, articleUpdated : articleUpdated): Observable<articleUpdated> {
+  const url = `${this.apiUrlUpdated}/update/${id}`;
+  return this.http.put<articleUpdated>(url, articleUpdated).pipe(
+    catchError(this.handleError)
+  );
+}
+/*******************************************      handle error       *********************************************************************/
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

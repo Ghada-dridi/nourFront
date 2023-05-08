@@ -118,7 +118,7 @@ export class ListeContractComponent implements OnInit {
   }*/
   deleteItem(row) {
     
-    this.confirmService.confirm({message: `Delete`})
+    this.confirmService.confirm({message: `Voulez vous supprimer ce contrat?`})
       .subscribe(res => {
         if (res) {
           this.loader.open('supprimer contrat');

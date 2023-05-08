@@ -167,7 +167,7 @@
        
             <div> 
               <button mat-raised-button color="primary" style="float : left"  matStepperPrevious>Précédent</button>
-              <button mat-raised-button color="primary"  style="float: right" (click)="addContract()" matStepperNext>Enregistrer</button>
+              <button mat-raised-button color="primary"  style="float: right" (click)="addContract()" >Enregistrer</button>
             </div>
           </mat-step>
 
@@ -257,10 +257,6 @@
                             </button>
                            
                           </div>
-                          <div> 
-                            <button mat-raised-button color="primary" style="float : left"  matStepperPrevious>Précédent</button>
-                            <button mat-raised-button color="primary"  style="float: right" matStepperNext>Suivant</button>
-                          </div>
                         </div>
                       </div>
                       </div>
@@ -268,7 +264,10 @@
                   </div>
                  
               </form>
-              
+              <div> 
+                <button mat-raised-button color="primary" style="float : left"  matStepperPrevious>Précédent</button>
+                <button mat-raised-button color="primary"  style="float: right" matStepperNext>Suivant</button>
+              </div>
         
            </mat-card-content>
             </mat-step>
@@ -351,6 +350,8 @@
 
              <div>
               <button mat-raised-button color="primary" style="float : left"  matStepperPrevious>Précédent</button>
+              <button mat-raised-button color="primary" style="float : right" >Terminer</button>
+
             </div>
         
         
