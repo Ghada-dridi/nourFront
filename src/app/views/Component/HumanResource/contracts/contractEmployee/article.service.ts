@@ -32,13 +32,6 @@ export class ArticleService {
     );
   }
 
-/*******************************************  update articel Updated   **********************************************/
-updateArticleItem(id: number, articleUpdated : articleUpdated): Observable<articleUpdated> {
-  const url = `${this.apiUrlUpdated}/update/${id}`;
-  return this.http.put<articleUpdated>(url, articleUpdated).pipe(
-    catchError(this.handleError)
-  );
-}
 /*******************************************      handle error       *********************************************************************/
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

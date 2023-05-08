@@ -61,7 +61,7 @@ addExceptinalFee(exceptionalFee: any): Observable<any> {
 /** Delete Exceptional Fee**/
  
 deleteExceptinalFee(id: number): Observable<exceptionalFee> {
-  const url = `${this.apiUrlFee}/${id}`;
+  const url = `${this.apiUrlFee}/delete/${id}`;
   return this.http.delete<exceptionalFee>(url).pipe(
     catchError(this.handleError)
   );
@@ -83,7 +83,7 @@ addBenefit(benefit: any): Observable<any> {
    
 /** Delete Benefit **/
   deleteBenefit(id: number): Observable<benefit> {
-    const url = `${this.apiUrlBenefit}/${id}`;
+    const url = `${this.apiUrlBenefit}/delete/${id}`;
     return this.http.delete<benefit>(url).pipe(
       catchError(this.handleError)
     );

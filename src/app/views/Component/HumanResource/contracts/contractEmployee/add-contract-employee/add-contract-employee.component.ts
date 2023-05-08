@@ -1,3 +1,4 @@
+import { exceptionalFee } from './../../../../../../shared/models/avantagesContrat';
 import { MatTabGroup } from '@angular/material/tabs';
 import { HttpClient } from '@angular/common/http';
 import { ArticleService } from './../article.service';
@@ -5,11 +6,15 @@ import { ContractEmployeeService } from './../contract-employee.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FileUploader } from 'ng2-file-upload';
-import { article } from 'app/shared/models/article';
+import { article, articleUpdated } from 'app/shared/models/article';
 import { ContractBenifitType, Currency, FeeType } from 'app/shared/models/avantagesContrat';
 import { AppConfirmService } from 'app/shared/services/app-confirm/app-confirm.service';
 import { Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
+import { MatTableDataSource } from '@angular/material/table';
+import { AppLoaderComponent } from 'app/shared/services/app-loader/app-loader.component';
+import { AppLoaderService } from 'app/shared/services/app-loader/app-loader.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -30,12 +35,13 @@ export class AddContractEmployeeComponent implements OnInit {
   selectedArticle : any;
   selectedContract = {contractTitle :'',startDate:'', id:null};
 
-
+  public dataSource: MatTableDataSource<articleUpdated>;
   formArticle = new FormGroup({
   articleTitle: new FormControl(''),
   description: new FormControl('test')
   });
-
+exceptionalFeeId : number ;
+benefitId : number;
   articleForm : FormGroup;
   myFormGroup : FormGroup;
   myFormContract : FormGroup;
@@ -50,7 +56,6 @@ export class AddContractEmployeeComponent implements OnInit {
 
   myFormArticle : FormGroup;
   updatedArticles = []; 
-
 
   FeeTypes = Object.values( FeeType).filter((element) => {
   return isNaN(Number(element));
@@ -69,13 +74,16 @@ export class AddContractEmployeeComponent implements OnInit {
 
     private fb: FormBuilder,
     private _formBuilder: FormBuilder,
+    private loader: AppLoaderService,
     private contractEmployeeService: ContractEmployeeService,
     private articleService: ArticleService,
     private confirmService : AppConfirmService,
     private router : Router,
+    private snack: MatSnackBar,
     private http : HttpClient,
     ) { 
-      
+    
+        this.dataSource = new MatTableDataSource<articleUpdated>([]);
     }
 
 
@@ -138,6 +146,7 @@ export class AddContractEmployeeComponent implements OnInit {
     value : new FormArray([])  
    });
    (this.myFormExceptionalFee.get('value') as FormArray).push(this.fb.group({
+    id : new FormControl('',Validators.required),
     shortDescription : new FormControl('', Validators.required), 
     feeType : new FormControl('', Validators.required), 
     amount : new FormControl ('', Validators.required),
@@ -151,6 +160,7 @@ export class AddContractEmployeeComponent implements OnInit {
   myValue : new FormArray([])  
  });
  (this.myFormBenefit.get('myValue') as FormArray).push(this.fb.group({
+  id : new FormControl('',Validators.required),
   shortDescription : new FormControl('', Validators.required), 
   description : new FormControl('', Validators.required), 
   contractBenifitType : new FormControl ('', Validators.required),
@@ -223,12 +233,14 @@ get getMyValueBenefit() {
          console.log('Form value', this.myFormExceptionalFee.value);
           this.submitted = true;
           (this.myFormExceptionalFee.get('value') as FormArray).push(this.fb.group({
+            id : new FormControl('',Validators.required),
             shortDescription : new FormControl('', Validators.required), 
             feeType : new FormControl('', Validators.required), 
             amount : new FormControl ('', Validators.required),
             currency : new FormControl('', Validators.required), 
             name : new FormControl ('', Validators.required),
           }));
+          this.exceptionalFeeId=res.id
         },
         error: (e) => {
           console.error('Error adding item', e);
@@ -237,8 +249,42 @@ get getMyValueBenefit() {
         }
       });
     }
+    /*********************************** confirmation exceptionalFee ******************************/
 
-    /************************************************** Ajouter Exceptional Fee ****************************************************/
+    confirmerFee(): void {
+      this.confirmService.confirm({ message: 'Les frais exceptionnels sont ajoutés avec succès ! Voulez-vous ajouter des bénéfices ?' })
+        .subscribe((result: boolean) => {
+          if (result) {
+            this.stepper.next();
+          } else {
+            this.router.navigate(['/contractEmployee/liste-employee-contracts']);
+          }
+        });
+    }
+   /*********************************** supprimer exceptionalFee ******************************/
+
+deleteExceptionalFee(id : any) : void {
+    
+    this.confirmService.confirm({message: `suppression frais exceptionnel`})
+      .subscribe(res => {
+        if (res) {
+          this.loader.open('supprimer frais exceptionnel ');
+          this.contractEmployeeService.deleteExceptinalFee(this.exceptionalFeeId)
+          .subscribe((data:any)=> {
+              this.dataSource = data;
+              this.loader.close();
+              this.snack.open('Frais exceptionnel supprimée!', 'OK', { duration: 4000 })
+             
+            })
+        }
+      })
+  }
+  
+  
+
+ 
+   
+    /************************************************** Ajouter Benefit****************************************************/
 
   addBenefit(i:any): void {
     console.log('Submitting form...');
@@ -252,7 +298,9 @@ get getMyValueBenefit() {
           description : new FormControl('', Validators.required), 
           contractBenifitType : new FormControl ('', Validators.required),
         }));
+        this.benefitId=res.id
       },
+    
       error: (e) => {
         console.error('Error adding item', e);
         console.log('Form is invalid');
@@ -260,6 +308,39 @@ get getMyValueBenefit() {
       }
     });
   }
+
+ /*********************************** confirmation benefit ******************************/
+
+ confirmerBenefit(): void {
+  this.confirmService.confirm({ message: 'Les bénéfices sont ajoutés avec succès !' })
+    .subscribe((result: boolean) => {
+      if (result) {
+        // Afficher le message de succès
+        console.log('Les bénéfices sont ajoutés avec succès !');
+      }
+
+      // Redirection vers la liste des contrats
+      this.router.navigate(['/contractEmployee/liste-employee-contracts']);
+    });
+}
+
+ /*********************************** supprimer benefit ******************************/
+ deletebenefit(id : any) : void {
+    
+  this.confirmService.confirm({message: `suppression du bénéfice`})
+    .subscribe(res => {
+      if (res) {
+        this.loader.open('supprimer bénéfice ');
+        this.contractEmployeeService.deleteBenefit(this.benefitId)
+        .subscribe((data:any)=> {
+            this.dataSource = data;
+            this.loader.close();
+            this.snack.open('bénéfice supprimé!', 'OK', { duration: 4000 })
+           
+          })
+      }
+    })
+}
 
 
 /************************************************** Ajouter contrat  ****************************************************/
@@ -305,6 +386,10 @@ get getMyValueBenefit() {
       this.Articles = data
     });
   }
+
+ 
+    
+  
 
   /**********************************    ***********************/
   

@@ -158,9 +158,6 @@
           
              <div fxLayout="row" fxLayoutAlign="end center" style="margin-top: 16px;">
               <button mat-icon-button >
-                <mat-icon >edit</mat-icon>
-              </button>
-              <button mat-icon-button >
                 <mat-icon (click)="addArticleFormGroup()">add</mat-icon>
               </button>
             </div>
@@ -249,7 +246,7 @@
                         </div>
                           <div class="form-group col-sm-12 col-md-3 d-flex justify-content-center align-items-center">
                         
-                            <button mat-icon-button color="warn" type="button">
+                            <button mat-icon-button color="warn" type="button"  (click)="deleteExceptionalFee(i)">
                               <mat-icon>delete</mat-icon>
                             </button>
                             <button mat-icon-button color="primary" type="button" (click)="addExceptionalFee(i)">
@@ -266,7 +263,8 @@
               </form>
               <div> 
                 <button mat-raised-button color="primary" style="float : left"  matStepperPrevious>Précédent</button>
-                <button mat-raised-button color="primary"  style="float: right" matStepperNext>Suivant</button>
+                <button mat-raised-button color="primary" style="float: right" (click)="confirmerFee()">Suivant</button>
+
               </div>
         
            </mat-card-content>
@@ -328,7 +326,7 @@
                         
                           <div class="form-group col-sm-12 col-md-3 d-flex justify-content-center align-items-center">
                         
-                            <button mat-icon-button color="warn" type="button">
+                            <button mat-icon-button color="warn" type="button" (click)="deletebenefit(i)">
                               <mat-icon>delete</mat-icon>
                             </button>
                             <button mat-icon-button color="primary" type="button" (click)="addBenefit(i)">
@@ -350,7 +348,7 @@
 
              <div>
               <button mat-raised-button color="primary" style="float : left"  matStepperPrevious>Précédent</button>
-              <button mat-raised-button color="primary" style="float : right" >Terminer</button>
+              <button mat-raised-button color="primary" style="float : right" (click)="confirmerBenefit()" >Terminer</button>
 
             </div>
         
